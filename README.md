@@ -10,7 +10,7 @@ https://armandozasa.github.io/athletic-cut-coach/
 
 El repositorio contiene el paquete completo de la app y un workflow en `.github/workflows/pages.yml` que descomprime, instala dependencias, compila con Vite y publica `dist` en GitHub Pages.
 
-En GitHub, configura **Settings → Pages → Build and deployment → Source → GitHub Actions** para habilitar el sitio.
+GitHub Pages está configurado para desplegar mediante GitHub Actions.
 
 Después, abre la URL en Safari del iPhone y usa **Compartir → Agregar a pantalla de inicio**.
 
