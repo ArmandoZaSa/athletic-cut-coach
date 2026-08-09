@@ -1,4 +1,4 @@
-(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.CutCoachHealthCore=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;root.CutCoachHealthCore=api;if(root&&root.document)queueMicrotask(()=>api.installBrowser());})(typeof globalThis!=='undefined'?globalThis:this,function(){
 'use strict';
 const VERSION='4.8.3', CHUNK=2*1024*1024, DB_NAME='athletic-cut-coach-db', DB_VERSION=3, STORE='health', STORE_KEY='current', LOCAL_KEY='athletic-cut-coach-v4-static';
 const TARGET_IDS=['HKCategoryTypeIdentifierSleepAnalysis','HKQuantityTypeIdentifierHeartRateVariabilitySDNN','HKQuantityTypeIdentifierRestingHeartRate','HKQuantityTypeIdentifierActiveEnergyBurned','HKQuantityTypeIdentifierDistanceWalkingRunning','HKQuantityTypeIdentifierAppleExerciseTime','HKQuantityTypeIdentifierAppleStandTime'];
