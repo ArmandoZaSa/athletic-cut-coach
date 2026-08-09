@@ -3,6 +3,11 @@ on:
   push:
     paths:
       - 'site/health-core-v482.js'
+      - 'site/source-insights-v44.js'
+      - 'site/v46.js'
+      - 'site/v473.js'
+      - 'site/version-lock-v477.js'
+      - 'site/sw.js'
       - 'tests/health-core.test.js'
       - '.github/workflows/health-integration-tests.yml'
   workflow_dispatch:
@@ -14,7 +19,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Syntax check
-        run: node --check site/health-core-v482.js
+      - name: Runtime syntax checks
+        run: |
+          node --check site/health-core-v482.js
+          node --check site/source-insights-v44.js
+          node --check site/v46.js
+          node --check site/v473.js
+          node --check site/version-lock-v477.js
+          node --check site/sw.js
       - name: Health integration tests
         run: node --test tests/health-core.test.js
