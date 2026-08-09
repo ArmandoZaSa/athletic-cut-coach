@@ -1,6 +1,6 @@
-// Athletic Cut Coach v4.7.8 — UI version/runtime lock
+// Athletic Cut Coach v4.7.9 — UI version/runtime lock
 (function(){
-  const VERSION='v4.7.8';
+  const VERSION='v4.7.9';
   function stamp(){
     const b=document.querySelector('.brand');
     if(b)b.innerHTML=`Athletic Cut Coach <span class="v473-version">${VERSION}</span>`;
@@ -10,9 +10,9 @@
   function lock(){
     stamp();
     const old=window.render;
-    if(typeof old==='function'&&!old.__v478lock){
+    if(typeof old==='function'&&!old.__v479lock){
       const wrapped=function(){const r=old.apply(this,arguments);queueMicrotask(stamp);return r};
-      wrapped.__v478lock=true;
+      wrapped.__v479lock=true;
       window.render=wrapped;
     }
   }
