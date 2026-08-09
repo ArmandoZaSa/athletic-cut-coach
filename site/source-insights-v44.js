@@ -1,4 +1,4 @@
-// Athletic Cut Coach v4.7.9.2 diagnostics and loaders
+// Athletic Cut Coach v4.8.0 diagnostics and loaders
 (function(){
   const metricLabels={weight:'Peso',bodyfat:'Grasa',bmi:'IMC',waist:'Cintura',steps:'Pasos',distance:'Distancia',flights:'Pisos',activeEnergy:'Energía activa',restingEnergy:'Energía reposo',exerciseMinutes:'Ejercicio',standMinutes:'De pie',heartRate:'FC',restingHR:'FC reposo',walkingHR:'FC caminando',hrv:'HRV',oxygen:'SpO₂',respiratory:'Respiración',sleep:'Sueño',workouts:'Entrenamientos'};
   const compactName=n=>n.replace(/^com\./,'').replace(/^Health$/,'Apple Salud');
@@ -12,11 +12,12 @@
     let box=document.getElementById('healthkitDiagnostics');
     if(!box){box=document.createElement('div');box.id='healthkitDiagnostics';box.className='card';const first=salud.querySelector('.card');first?.after(box)}
     const dg=db?.health?.diagnostics||{},types=dg.relevantTypes||[];
-    if(!types.length){box.innerHTML='<h2>Diagnóstico HealthKit</h2><div class="small">Aún no hay un censo de tipos. Importa export.xml con v4.7.9 o superior.</div>';return}
+    const persisted=!!window.__CUT_COACH_HEALTH_HYDRATED;
+    if(!types.length){box.innerHTML=`<h2>Diagnóstico HealthKit</h2><div class="small">${persisted?'IndexedDB cargado, pero este historial aún no contiene un censo de tipos. Importa export.xml una vez más con v4.8.0.':'Cargando almacenamiento persistente de Salud…'}</div>`;return}
     const wanted=[/sleep/i,/variability|hrv/i,/restingheart/i,/activeenergy/i,/distance/i,/exercisetime/i,/standtime/i];
     const foundWanted=types.filter(x=>wanted.some(r=>r.test(x.type)));
     const status=foundWanted.length?'<span class="badge ok">Tipos objetivo encontrados</span>':'<span class="badge">Tipos objetivo no visibles</span>';
-    box.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Diagnóstico HealthKit</h2>${status}</div><div class="small" style="margin:6px 0 12px">${dg.distinctTypes||types.length} tipos distintos detectados. Se muestran los tipos relevantes guardados por el importador.</div><div>${types.map(x=>`<div class="hist"><b>${shortType(x.type)}</b><br><span class="small">${Number(x.count||0).toLocaleString('es-MX')} registros · <code style="font-size:10px;word-break:break-all">${x.type}</code></span></div>`).join('')}</div>`;
+    box.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Diagnóstico HealthKit</h2>${status}</div><div class="small" style="margin:6px 0 12px">${dg.distinctTypes||types.length} tipos distintos detectados · almacenamiento persistente activo.</div><div>${types.map(x=>`<div class="hist"><b>${shortType(x.type)}</b><br><span class="small">${Number(x.count||0).toLocaleString('es-MX')} registros · <code style="font-size:10px;word-break:break-all">${x.type}</code></span></div>`).join('')}</div>`;
   };
   window.renderSourceInsights=function(){
     const list=document.querySelector('.sourceList');if(!list)return;let box=document.getElementById('sourceInsights');if(!box){box=document.createElement('div');box.id='sourceInsights';box.style.marginTop='14px';list.parentElement.appendChild(box)}
@@ -27,11 +28,21 @@
   window.renderHealthV45=function(){
     const inicio=document.getElementById('inicio');if(!inicio)return;let card=document.getElementById('healthExpanded');if(!card){card=document.createElement('div');card.id='healthExpanded';card.className='card';const coach=document.querySelector('#inicio .card');inicio.insertBefore(card,coach)}
     const keys=[['sleep','Sueño'],['hrv','HRV'],['restingHR','FC reposo'],['activeEnergy','Energía activa'],['distance','Distancia'],['exerciseMinutes','Ejercicio'],['oxygen','SpO₂'],['respiratory','Respiración'],['weight','Peso'],['bodyfat','Grasa corporal']];
-    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Salud ampliada</h2><span class="badge ok">v4.7.9.2</span></div><div class="small" style="margin:6px 0 12px">Último dato disponible, con fecha y procedencia cuando está disponible.</div><div class="grid">'+keys.map(([k,l])=>{const x=latestMetric(k);return`<div class="metric"><b style="font-size:18px">${x?fmt(k,x.v):'No disponible'}</b><span>${l}${x?` · ${fmtDate(x.date)}${x.source?' · '+x.source:''}`:''}</span></div>`}).join('')+'</div>';
+    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Salud ampliada</h2><span class="badge ok">v4.8.0</span></div><div class="small" style="margin:6px 0 12px">Último dato disponible, con fecha y procedencia. Salud se conserva en IndexedDB.</div><div class="grid">'+keys.map(([k,l])=>{const x=latestMetric(k);return`<div class="metric"><b style="font-size:18px">${x?fmt(k,x.v):'No disponible'}</b><span>${l}${x?` · ${fmtDate(x.date)}${x.source?' · '+x.source:''}`:''}</span></div>`}).join('')+'</div>';
     const sl=latestMetric('sleep'),hv=latestMetric('hrv');if(window.sSleep)sSleep.textContent=sl?fmt('sleep',sl.v):'—';if(window.sHrv)sHrv.textContent=hv?fmt('hrv',hv.v):'—'
   };
   function css(href,id){if(document.getElementById(id))return;const l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=href;document.head.appendChild(l)}
   function js(src,data,onload){if(document.querySelector(`script[${data}]`))return;const s=document.createElement('script');s.src=src;s.setAttribute(data,'1');if(onload)s.onload=onload;document.body.appendChild(s)}
   const old=window.render;if(typeof old==='function')window.render=function(){old();window.renderSourceInsights();window.renderHealthV45();window.renderHealthKitDiagnostics()};
-  setTimeout(()=>{css('./v473.css?v=4792','v473css');js('./health-import-v474.js?v=4792','data-health4792',()=>{renderHealthV45();renderSourceInsights();renderHealthKitDiagnostics()});js('./v46.js?v=4792','data-v46');js('./v473.js?v=4792','data-v4792');js('./context-guard-v477.js?v=4792','data-context4792');js('./version-lock-v477.js?v=4792','data-version4792');renderSourceInsights();renderHealthV45();renderHealthKitDiagnostics()},0);
+  setTimeout(()=>{
+    css('./v473.css?v=480','v473css');
+    js('./health-store-v480.js?v=480','data-store480',()=>{
+      js('./health-import-v474.js?v=480','data-health480',()=>{
+        js('./health-persist-v480.js?v=480','data-persist480');
+        renderHealthV45();renderSourceInsights();renderHealthKitDiagnostics();
+      });
+    });
+    js('./v46.js?v=480','data-v46');js('./v473.js?v=480','data-v480');js('./context-guard-v477.js?v=480','data-context480');js('./version-lock-v477.js?v=480','data-version480');
+    renderSourceInsights();renderHealthV45();renderHealthKitDiagnostics();
+  },0);
 })();
