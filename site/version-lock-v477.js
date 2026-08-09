@@ -1,22 +1,2 @@
-// Athletic Cut Coach v4.8.1 — UI version/runtime lock
-(function(){
-  const VERSION='v4.8.1';
-  function stamp(){
-    const b=document.querySelector('.brand');
-    if(b)b.innerHTML=`Athletic Cut Coach <span class="v473-version">${VERSION}</span>`;
-    const expanded=document.querySelector('#healthExpanded .badge.ok');
-    if(expanded)expanded.textContent=VERSION;
-  }
-  function lock(){
-    stamp();
-    const old=window.render;
-    if(typeof old==='function'&&!old.__v481lock){
-      const wrapped=function(){const r=old.apply(this,arguments);queueMicrotask(stamp);return r};
-      wrapped.__v481lock=true;
-      window.render=wrapped;
-    }
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(lock,250));else setTimeout(lock,250);
-  setInterval(stamp,1500);
-  window.__CUT_COACH_UI_VERSION=VERSION;
-})();
+// Athletic Cut Coach v4.8.2 — UI version/runtime lock
+(function(){const VERSION='v4.8.2';function stamp(){const b=document.querySelector('.brand');if(b)b.innerHTML=`Athletic Cut Coach <span class="v473-version">${VERSION}</span>`;const expanded=document.querySelector('#healthExpanded .badge.ok');if(expanded)expanded.textContent=VERSION}function lock(){stamp();const old=window.render;if(typeof old==='function'&&!old.__v482lock){const wrapped=function(){const r=old.apply(this,arguments);queueMicrotask(stamp);return r};wrapped.__v482lock=true;window.render=wrapped}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(lock,250));else setTimeout(lock,250);setInterval(stamp,1500);window.__CUT_COACH_UI_VERSION=VERSION})();
