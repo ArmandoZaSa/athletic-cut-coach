@@ -9,5 +9,5 @@
   function css(href,id){if(document.getElementById(id))return;const l=document.createElement('link');l.id=id;l.rel='stylesheet';l.href=href;document.head.appendChild(l)}
   function js(src,data,onload){if(document.querySelector(`script[${data}]`))return;const s=document.createElement('script');s.src=src;s.setAttribute(data,'1');if(onload)s.onload=onload;document.body.appendChild(s)}
   const old=window.render;if(typeof old==='function')window.render=function(){old();window.renderSourceInsights();window.renderHealthV45()};
-  setTimeout(()=>{css('./v473.css?v=477','v473css');js('./health-import-v474.js?v=477','data-health477',()=>{renderHealthV45();renderSourceInsights()});js('./v46.js?v=477','data-v46');js('./v473.js?v=477','data-v477');js('./context-guard-v477.js?v=477','data-context477');renderSourceInsights();renderHealthV45()},0);
+  setTimeout(()=>{css('./v473.css?v=4772','v473css');js('./health-import-v474.js?v=4772','data-health477',()=>{renderHealthV45();renderSourceInsights()});js('./v46.js?v=4772','data-v46');js('./v473.js?v=4772','data-v477');js('./context-guard-v477.js?v=4772','data-context477');js('./version-lock-v477.js?v=4772','data-version477');renderSourceInsights();renderHealthV45()},0);
 })();
