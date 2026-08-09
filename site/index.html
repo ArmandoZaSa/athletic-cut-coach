@@ -14,139 +14,14 @@
 </head>
 <body>
 <main>
-  <div class="top">
-    <div>
-      <div class="brand">Athletic Cut Coach <span class="v473-version">v4.8.4</span></div>
-      <div class="sub">Tu hub personal de definición y rendimiento</div>
-    </div>
-    <div class="pill" id="today"></div>
-  </div>
-
-  <section id="inicio" class="section active">
-    <div class="hero">
-      <div class="heroTop">
-        <div>
-          <div class="eyebrow">Estado de datos</div>
-          <h1 id="syncHeadline">Conecta tu historial de Salud</h1>
-          <p id="syncSub">Importa Apple Salud y combina peso, sueño, actividad y entrenamientos.</p>
-        </div>
-        <div id="syncDot" class="statusDot"></div>
-      </div>
-      <div class="statStrip">
-        <div class="mini"><b id="sSteps">—</b><span>Pasos hoy</span></div>
-        <div class="mini"><b id="sSleep">—</b><span>Sueño</span></div>
-        <div class="mini"><b id="sHrv">—</b><span>HRV</span></div>
-      </div>
-      <button class="full" style="margin-top:12px" onclick="openImport()">Importar Apple Salud</button>
-    </div>
-    <div class="grid">
-      <div class="metric"><b id="mPeso">—</b><span>Peso kg</span></div>
-      <div class="metric"><b id="mCintura">—</b><span>Cintura cm</span></div>
-      <div class="metric"><b id="mProteina">—</b><span>Proteína hoy</span></div>
-      <div class="metric"><b id="mVolumen">—</b><span>Volumen fuerza</span></div>
-    </div>
-    <div class="card"><h2>Coach del día</h2><div id="coach" class="small">Registra o importa tus datos para generar una recomendación.</div></div>
-    <div class="card">
-      <h2>Objetivos</h2>
-      <label>Proteína</label><div class="bar"><div class="fill" id="proteinBar" style="width:0%"></div></div>
-      <label>Calorías</label><div class="bar"><div class="fill" id="calBar" style="width:0%"></div></div>
-    </div>
-  </section>
-
-  <section id="entreno" class="section">
-    <div class="sectionTitle"><h2>Entrenamiento</h2><span class="badge info" id="healthWorkoutBadge">0 de Salud</span></div>
-    <div class="card">
-      <label>Sesión</label>
-      <select id="session"><option>Push</option><option>Pull</option><option>Pierna</option><option>Hombro + Core</option></select>
-      <div id="exercises"></div>
-      <button class="full" onclick="saveWorkout()">Guardar entrenamiento</button>
-    </div>
-    <div class="card"><h2>Últimas sesiones</h2><div id="workoutHistory" class="history"></div></div>
-    <div class="card"><h2>Entrenamientos importados</h2><div id="healthWorkoutHistory" class="history"></div></div>
-  </section>
-
-  <section id="salud" class="section">
-    <div class="sectionTitle"><h2>Salud y recuperación</h2><button class="ghost" onclick="openImport()">Importar</button></div>
-    <div class="card">
-      <h2>Fuentes</h2>
-      <div class="sourceList">
-        <div class="source"><div class="sourceInfo"><div class="sourceIcon">❤️</div><div><div class="sourceName">Apple Salud</div><div class="tiny">Archivo export.xml</div></div></div><span id="srcApple" class="badge">Sin importar</span></div>
-        <div class="source"><div class="sourceInfo"><div class="sourceIcon">⌚</div><div><div class="sourceName">Huawei Health</div><div class="tiny">Vía datos escritos en Apple Salud</div></div></div><span id="srcHuawei" class="badge">No detectado</span></div>
-        <div class="source"><div class="sourceInfo"><div class="sourceIcon">🏋️</div><div><div class="sourceName">GRAVL</div><div class="tiny">Vía entrenamientos compartidos con Apple Salud</div></div></div><span id="srcGravl" class="badge">No detectado</span></div>
-      </div>
-      <div id="sourceInsights" style="margin-top:14px"><div class="small">v4.8.4: importa export.xml para ver procedencia y métricas por fuente.</div></div>
-    </div>
-    <div class="card"><h2>Tendencias recientes</h2><div id="healthTrends"></div></div>
-    <div class="card">
-      <h2>Registro manual</h2>
-      <div class="row">
-        <div><label>Peso kg</label><input id="weight" type="number" step="0.1"></div>
-        <div><label>Grasa %</label><input id="bodyfat" type="number" step="0.1"></div>
-      </div>
-      <label>Cintura cm</label><input id="waist" type="number" step="0.1">
-      <label>Sueño h</label><input id="sleep" type="number" step="0.1">
-      <button class="full" onclick="saveProgress()">Guardar progreso</button>
-    </div>
-    <div class="card"><h2>Historial</h2><div id="progressHistory" class="history"></div></div>
-  </section>
-
-  <section id="nutricion" class="section">
-    <div class="sectionTitle"><h2>Nutrición</h2><span class="badge" id="nutritionStatus">Hoy</span></div>
-    <div class="card">
-      <div class="row"><div><label>Calorías</label><input id="kcal" type="number"></div><div><label>Proteína g</label><input id="protein" type="number"></div></div>
-      <div class="row"><div><label>Carbohidratos g</label><input id="carbs" type="number"></div><div><label>Grasas g</label><input id="fat" type="number"></div></div>
-      <label>Adherencia</label><select id="adherence"><option value="100">100%</option><option value="90">90%</option><option value="80">80%</option><option value="70">70%</option></select>
-      <button class="full" onclick="saveNutrition()">Guardar nutrición</button>
-    </div>
-  </section>
-
-  <section id="ajustes" class="section">
-    <div class="card">
-      <h2>Objetivos personales</h2>
-      <div class="row"><div><label>Kcal objetivo</label><input id="goalKcal" type="number"></div><div><label>Proteína objetivo</label><input id="goalProtein" type="number"></div></div>
-      <button class="full" onclick="saveGoals()">Guardar objetivos</button>
-    </div>
-    <div class="card">
-      <h2>Datos y privacidad</h2>
-      <p class="small">La exportación de Salud se procesa en tu dispositivo y el historial de Salud se conserva en IndexedDB.</p>
-      <div class="actionGrid"><button class="secondary" onclick="exportData()">Exportar respaldo</button><button class="secondary" onclick="backupFile.click()">Restaurar</button></div>
-      <input id="backupFile" type="file" accept="application/json" hidden onchange="importData(event)">
-    </div>
-  </section>
+  <div class="top"><div><div class="brand">Athletic Cut Coach <span class="v473-version">v4.8.10</span></div><div class="sub">Tu hub personal de definición y rendimiento</div></div><div class="pill" id="today"></div></div>
+  <section id="inicio" class="section active"><div class="hero"><div class="heroTop"><div><div class="eyebrow">Estado de datos</div><h1 id="syncHeadline">Conecta tu historial de Salud</h1><p id="syncSub">Importa Apple Salud y combina peso, sueño, actividad y entrenamientos.</p></div><div id="syncDot" class="statusDot"></div></div><div class="statStrip"><div class="mini"><b id="sSteps">—</b><span>Pasos hoy</span></div><div class="mini"><b id="sSleep">—</b><span>Sueño</span></div><div class="mini"><b id="sHrv">—</b><span>HRV</span></div></div><button class="full" style="margin-top:12px" onclick="openImport()">Importar Apple Salud</button></div><div class="grid"><div class="metric"><b id="mPeso">—</b><span>Peso kg</span></div><div class="metric"><b id="mCintura">—</b><span>Cintura cm</span></div><div class="metric"><b id="mProteina">—</b><span>Proteína hoy</span></div><div class="metric"><b id="mVolumen">—</b><span>Volumen fuerza</span></div></div><div class="card"><h2>Coach del día</h2><div id="coach" class="small">Registra o importa tus datos para generar una recomendación.</div></div><div class="card"><h2>Objetivos</h2><label>Proteína</label><div class="bar"><div class="fill" id="proteinBar" style="width:0%"></div></div><label>Calorías</label><div class="bar"><div class="fill" id="calBar" style="width:0%"></div></div></div></section>
+  <section id="entreno" class="section"><div class="sectionTitle"><h2>Entrenamiento</h2><span class="badge info" id="healthWorkoutBadge">0 de Salud</span></div><div class="card"><label>Sesión</label><select id="session"><option>Push</option><option>Pull</option><option>Pierna</option><option>Hombro + Core</option></select><div id="exercises"></div><button class="full" onclick="saveWorkout()">Guardar entrenamiento</button></div><div class="card"><h2>Últimas sesiones</h2><div id="workoutHistory" class="history"></div></div><div class="card"><h2>Entrenamientos importados</h2><div id="healthWorkoutHistory" class="history"></div></div></section>
+  <section id="salud" class="section"><div class="sectionTitle"><h2>Salud y recuperación</h2><button class="ghost" onclick="openImport()">Importar</button></div><div class="card"><h2>Fuentes</h2><div class="sourceList"><div class="source"><div class="sourceInfo"><div class="sourceIcon">❤️</div><div><div class="sourceName">Apple Salud</div><div class="tiny">Archivo export.xml</div></div></div><span id="srcApple" class="badge">Sin importar</span></div><div class="source"><div class="sourceInfo"><div class="sourceIcon">⌚</div><div><div class="sourceName">Huawei Health</div><div class="tiny">Vía datos escritos en Apple Salud</div></div></div><span id="srcHuawei" class="badge">No detectado</span></div><div class="source"><div class="sourceInfo"><div class="sourceIcon">🏋️</div><div><div class="sourceName">GRAVL</div><div class="tiny">Vía entrenamientos compartidos con Apple Salud</div></div></div><span id="srcGravl" class="badge">No detectado</span></div></div><div id="sourceInsights" style="margin-top:14px"><div class="small">Importa export.xml para ver procedencia y métricas por fuente.</div></div></div><div class="card"><h2>Tendencias recientes</h2><div id="healthTrends"></div></div><div class="card"><h2>Registro manual</h2><div class="row"><div><label>Peso kg</label><input id="weight" type="number" step="0.1"></div><div><label>Grasa %</label><input id="bodyfat" type="number" step="0.1"></div></div><label>Cintura cm</label><input id="waist" type="number" step="0.1"><label>Sueño h</label><input id="sleep" type="number" step="0.1"><button class="full" onclick="saveProgress()">Guardar progreso</button></div><div class="card"><h2>Historial</h2><div id="progressHistory" class="history"></div></div></section>
+  <section id="nutricion" class="section"><div class="sectionTitle"><h2>Nutrición</h2><span class="badge" id="nutritionStatus">Hoy</span></div><div class="card"><div class="row"><div><label>Calorías</label><input id="kcal" type="number"></div><div><label>Proteína g</label><input id="protein" type="number"></div></div><div class="row"><div><label>Carbohidratos g</label><input id="carbs" type="number"></div><div><label>Grasas g</label><input id="fat" type="number"></div></div><label>Adherencia</label><select id="adherence"><option value="100">100%</option><option value="90">90%</option><option value="80">80%</option><option value="70">70%</option></select><button class="full" onclick="saveNutrition()">Guardar nutrición</button></div></section>
+  <section id="ajustes" class="section"><div class="card"><h2>Objetivos personales</h2><div class="row"><div><label>Kcal objetivo</label><input id="goalKcal" type="number"></div><div><label>Proteína objetivo</label><input id="goalProtein" type="number"></div></div><button class="full" onclick="saveGoals()">Guardar objetivos</button></div><div class="card"><h2>Datos y privacidad</h2><p class="small">La exportación de Salud se procesa en tu dispositivo y el historial de Salud se conserva en IndexedDB.</p><div class="actionGrid"><button class="secondary" onclick="exportData()">Exportar respaldo</button><button class="secondary" onclick="backupFile.click()">Restaurar</button></div><input id="backupFile" type="file" accept="application/json" hidden onchange="importData(event)"></div></section>
 </main>
-
-<nav class="tabs"><div class="wrap">
-  <button class="tab active" data-target="inicio"><span>⌂</span>Inicio</button>
-  <button class="tab" data-target="entreno"><span>🏋️</span>Entreno</button>
-  <button class="tab" data-target="salud"><span>♥</span>Salud</button>
-  <button class="tab" data-target="nutricion"><span>◉</span>Nutrición</button>
-  <button class="tab" data-target="ajustes"><span>⚙</span>Más</button>
-</div></nav>
-
-<div id="toast" class="toast"></div>
-<div id="importModal" class="modal" onclick="if(event.target===this)closeImport()">
-  <div class="sheet">
-    <div class="handle"></div>
-    <h2>Importar Apple Salud</h2>
-    <p class="small">Selecciona directamente <b>export.xml</b>. v4.8.4 procesa Record, Workout y ActivitySummary por streaming, verifica literalmente los identificadores HealthKit críticos y guarda Salud en IndexedDB.</p>
-    <div class="importBox">
-      <strong>Selecciona export.xml</strong>
-      <input id="healthFile" type="file" accept=".xml,text/xml" hidden onchange="handleHealthFile(event)">
-      <button style="margin-top:12px" onclick="healthFile.click()">Elegir export.xml</button>
-      <div class="progressLine"><i id="importProgress"></i></div>
-      <div id="importStatus" class="small" style="margin-top:8px"></div>
-    </div>
-    <button class="ghost full" style="margin-top:14px" onclick="closeImport()">Cerrar</button>
-  </div>
-</div>
-
-<script src="./app-v42.js?v=484"></script>
-<script src="./health-core-v483.js?v=484"></script>
-<script src="./v46.js?v=484"></script>
-<script src="./v473.js?v=484"></script>
-<script src="./source-insights-v44.js?v=484"></script>
-<script src="./context-guard-v477.js?v=484"></script>
-<script src="./version-lock-v477.js?v=484"></script>
-<script src="./stability-v484.js?v=484"></script>
-</body>
-</html>
+<nav class="tabs"><div class="wrap"><button class="tab active" data-target="inicio"><span>⌂</span>Inicio</button><button class="tab" data-target="entreno"><span>🏋️</span>Entreno</button><button class="tab" data-target="salud"><span>♥</span>Salud</button><button class="tab" data-target="nutricion"><span>◉</span>Nutrición</button><button class="tab" data-target="ajustes"><span>⚙</span>Más</button></div></nav>
+<div id="toast" class="toast"></div><div id="importModal" class="modal" onclick="if(event.target===this)closeImport()"><div class="sheet"><div class="handle"></div><h2>Importar Apple Salud</h2><p class="small">Selecciona el <b>XML exacto</b> de Apple Salud. La importación procesa Record, Workout y ActivitySummary y persiste Salud en IndexedDB.</p><div class="importBox"><strong>Selecciona export.xml</strong><input id="healthFile" type="file" accept=".xml,text/xml" hidden onchange="handleHealthFile(event)"><button style="margin-top:12px" onclick="healthFile.click()">Elegir export.xml</button><div class="progressLine"><i id="importProgress"></i></div><div id="importStatus" class="small" style="margin-top:8px"></div></div><button class="ghost full" style="margin-top:14px" onclick="closeImport()">Cerrar</button></div></div>
+<script src="./app-v42.js?v=484"></script><script src="./health-core-v483.js?v=484"></script><script src="./v46.js?v=484"></script><script src="./v473.js?v=484"></script><script src="./source-insights-v44.js?v=484"></script><script src="./context-guard-v477.js?v=484"></script><script src="./version-lock-v477.js?v=484"></script><script src="./stability-v484.js?v=484"></script><script src="./recovery-ui-v4810.js?v=4810"></script>
+</body></html>
