@@ -2,10 +2,12 @@ name: Health integration tests
 on:
   push:
     paths:
-      - 'site/health-core-v482.js'
+      - 'site/index.html'
+      - 'site/health-core-v483.js'
       - 'site/source-insights-v44.js'
       - 'site/v46.js'
       - 'site/v473.js'
+      - 'site/v473.css'
       - 'site/version-lock-v477.js'
       - 'site/sw.js'
       - 'tests/health-core.test.js'
@@ -21,7 +23,7 @@ jobs:
           node-version: '22'
       - name: Runtime syntax checks
         run: |
-          node --check site/health-core-v482.js
+          node --check site/health-core-v483.js
           node --check site/source-insights-v44.js
           node --check site/v46.js
           node --check site/v473.js
@@ -29,3 +31,9 @@ jobs:
           node --check site/sw.js
       - name: Health integration tests
         run: node --test tests/health-core.test.js
+      - name: Deterministic asset references
+        run: |
+          grep -q 'v473.css?v=483' site/index.html
+          grep -q 'health-core-v483.js?v=483' site/index.html
+          grep -q 'v473.js?v=483' site/index.html
+          grep -q "athletic-cut-coach-static-v483" site/sw.js
