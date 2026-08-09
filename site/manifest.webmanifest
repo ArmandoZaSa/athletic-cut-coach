@@ -1,0 +1,10 @@
+{
+  "name":"Athletic Cut Coach",
+  "short_name":"Cut Coach",
+  "start_url":"./",
+  "scope":"./",
+  "display":"standalone",
+  "background_color":"#0b0d10",
+  "theme_color":"#0b0d10",
+  "description":"Coach personal de definición, fuerza, nutrición y progreso."
+}
