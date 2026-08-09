@@ -1,16 +1,19 @@
-// Athletic Cut Coach v4.4 — source diagnostics UI
+// Athletic Cut Coach v4.5 — diagnostics + expanded dashboard loader
 (function(){
-  const metricLabels={weight:'Peso',bodyfat:'Grasa',waist:'Cintura',steps:'Pasos',activeEnergy:'Energía activa',restingHR:'FC reposo',hrv:'HRV',sleep:'Sueño',workouts:'Entrenamientos'};
-  function compactName(n){return n.replace(/^com\./,'').replace(/^Health$/,'Apple Salud')}
-  window.renderSourceInsights=function(){
-    const list=document.querySelector('.sourceList');if(!list)return;
-    let box=document.getElementById('sourceInsights');if(!box){box=document.createElement('div');box.id='sourceInsights';box.style.marginTop='14px';list.parentElement.appendChild(box)}
-    const stats=db?.health?.sourceStats||{};const names=Object.keys(stats);
-    if(!names.length){box.innerHTML='<div class="small">Reimporta export.xml con la v4.4 para ver qué métricas aporta cada fuente.</div>';return}
-    const relevant=names.filter(n=>/huawei|gravl|health|iphone|watch/i.test(n)).sort((a,b)=>{const aa=/huawei/i.test(a)?0:/gravl/i.test(a)?1:2,bb=/huawei/i.test(b)?0:/gravl/i.test(b)?1:2;return aa-bb});
-    const use=(relevant.length?relevant:names).slice(0,10);
-    box.innerHTML='<div class="eyebrow" style="margin:4px 0 10px">Qué aporta cada fuente</div>'+use.map(name=>{const s=stats[name],items=Object.entries(metricLabels).filter(([k])=>s[k]>0).map(([k,l])=>`${l}: ${Number(s[k]).toLocaleString('es-MX')}`).join(' · ');return `<div class="hist"><b>${compactName(name)}</b><br><span class="small">${items||'Sin métricas compatibles detectadas'} · ${s.days||0} días</span></div>`}).join('');
+  const metricLabels={weight:'Peso',bodyfat:'Grasa',bmi:'IMC',waist:'Cintura',steps:'Pasos',distance:'Distancia',flights:'Pisos',activeEnergy:'Energía activa',restingEnergy:'Energía reposo',exerciseMinutes:'Ejercicio',standMinutes:'De pie',heartRate:'FC',restingHR:'FC reposo',walkingHR:'FC caminando',hrv:'HRV',oxygen:'SpO₂',respiratory:'Respiración',sleep:'Sueño',workouts:'Entrenamientos'};
+  const compactName=n=>n.replace(/^com\./,'').replace(/^Health$/,'Apple Salud');
+  const fmtDate=d=>{try{return new Date(d+'T12:00:00').toLocaleDateString('es-MX',{day:'numeric',month:'short'})}catch{return d}};
+  const days=()=>Object.keys(db?.health?.daily||{}).sort().reverse();
+  function latestMetric(key){for(const d of days()){const v=db.health.daily[d]?.[key];if(v!==null&&v!==undefined&&v!==0)return{v,date:d}}return null}
+  function fmt(key,v){if(v==null)return'—';if(key==='sleep'){const h=Math.floor(v),m=Math.round((v-h)*60);return`${h} h ${m} min`}if(key==='weight')return`${v.toFixed?.(1)??v} kg`;if(key==='bodyfat')return`${v.toFixed?.(1)??v} %`;if(key==='bmi')return`${v.toFixed?.(1)??v}`;if(key==='steps')return Math.round(v).toLocaleString('es-MX');if(key==='distance')return`${v.toFixed?.(1)??v} km`;if(key==='activeEnergy'||key==='restingEnergy')return`${Math.round(v)} kcal`;if(key==='exerciseMinutes'||key==='standMinutes')return`${Math.round(v)} min`;if(key==='heartRate'||key==='restingHR'||key==='walkingHR')return`${Math.round(v)} lpm`;if(key==='hrv')return`${Math.round(v)} ms`;if(key==='oxygen')return`${v.toFixed?.(0)??v} %`;if(key==='respiratory')return`${v.toFixed?.(1)??v}/min`;return String(v)}
+  window.renderSourceInsights=function(){const list=document.querySelector('.sourceList');if(!list)return;let box=document.getElementById('sourceInsights');if(!box){box=document.createElement('div');box.id='sourceInsights';box.style.marginTop='14px';list.parentElement.appendChild(box)}const stats=db?.health?.sourceStats||{},names=Object.keys(stats);if(!names.length){box.innerHTML='<div class="small">Reimporta export.xml con la v4.5 para ver el desglose de métricas por fuente.</div>';return}const relevant=names.filter(n=>/huawei|gravl|health|iphone|watch/i.test(n)).sort((a,b)=>{const aa=/huawei/i.test(a)?0:/gravl/i.test(a)?1:2,bb=/huawei/i.test(b)?0:/gravl/i.test(b)?1:2;return aa-bb}),use=(relevant.length?relevant:names).slice(0,10);box.innerHTML='<div class="eyebrow" style="margin:4px 0 10px">Qué aporta cada fuente</div>'+use.map(name=>{const s=stats[name],items=Object.entries(metricLabels).filter(([k])=>s[k]>0).map(([k,l])=>`${l}: ${Number(s[k]).toLocaleString('es-MX')}`).join(' · ');return`<div class="hist"><b>${compactName(name)}</b><br><span class="small">${items||'Sin métricas compatibles detectadas'} · ${s.days||0} días</span></div>`}).join('')};
+  window.renderHealthV45=function(){
+    const inicio=document.getElementById('inicio');if(!inicio)return;let card=document.getElementById('healthExpanded');if(!card){card=document.createElement('div');card.id='healthExpanded';card.className='card';const coach=document.querySelector('#inicio .card');inicio.insertBefore(card,coach)}
+    const keys=[['sleep','Sueño'],['hrv','HRV'],['restingHR','FC reposo'],['activeEnergy','Energía activa'],['distance','Distancia'],['exerciseMinutes','Ejercicio'],['oxygen','SpO₂'],['respiratory','Respiración'],['weight','Peso'],['bodyfat','Grasa corporal']];
+    card.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2 style="margin:0">Salud ampliada</h2><span class="badge ok">v4.5</span></div><div class="small" style="margin:6px 0 12px">Último dato disponible, aunque no sea de hoy.</div><div class="grid">'+keys.map(([k,l])=>{const x=latestMetric(k);return`<div class="metric"><b style="font-size:18px">${x?fmt(k,x.v):'No disponible'}</b><span>${l}${x?` · ${fmtDate(x.date)}`:''}</span></div>`}).join('')+'</div>';
+    const sl=latestMetric('sleep'),hv=latestMetric('hrv');if(window.sSleep)sSleep.textContent=sl?fmt('sleep',sl.v):'—';if(window.sHrv)sHrv.textContent=hv?fmt('hrv',hv.v):'—';
   };
-  const old=window.render;if(typeof old==='function')window.render=function(){old();window.renderSourceInsights()};
-  setTimeout(window.renderSourceInsights,0);
+  function loadV45(){if(document.querySelector('script[data-v45]'))return;const s=document.createElement('script');s.src='./health-stream-v45.js?v=450';s.dataset.v45='1';s.onload=()=>{renderHealthV45();renderSourceInsights()};document.body.appendChild(s)}
+  const old=window.render;if(typeof old==='function')window.render=function(){old();window.renderSourceInsights();window.renderHealthV45()};
+  setTimeout(()=>{loadV45();renderSourceInsights();renderHealthV45()},0);
 })();
