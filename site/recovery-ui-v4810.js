@@ -1,7 +1,7 @@
-// Athletic Cut Coach v4.8.12 — recovery state synchronization
+// Athletic Cut Coach v4.8.13 — recovery state synchronization
 (function(){
 'use strict';
-const VERSION='v4.8.12';
+const VERSION='v4.8.13';
 const nz=v=>typeof v==='number'&&Number.isFinite(v)&&v>0;
 const D=()=>window.db?.health?.daily||{};
 const days=()=>Object.keys(D()).sort();
@@ -12,7 +12,7 @@ function calc(){const sl=latest('sleep'),hv=latest('hrv'),rh=latest('restingHR')
 function state(s){if(s==null)return['Sin línea base','Importa Apple Salud para calcular recuperación','neutral'];if(s>=80)return['Óptima','Puedes mantener o progresar','good'];if(s>=60)return['Buena','Mantén la sesión prevista','good'];if(s>=40)return['Moderada','Controla el volumen','warn'];return['Baja','Prioriza recuperación','bad']}
 function sync(){const root=document.getElementById('v473Home');if(!root)return;const x=calc(),hero=root.querySelector('.v473-hero');if(!hero)return;const note=root.querySelector('.v473-device-note');if(window.__CUT_COACH_HEALTH_HYDRATED||days().length||window.db?.health?.lastImport){if(note&&/Cargando Salud/i.test(note.textContent||''))note.remove()}const valid=x.count>=2&&(x.sl||x.hv);if(!valid)return;const [name,advice,tone]=state(x.score);hero.classList.remove('neutral','good','warn','bad');hero.classList.add(tone);const score=hero.querySelector('.v473-ring strong'),ring=hero.querySelector('.v473-ring'),title=hero.querySelector('.v473-recovery h2'),p=hero.querySelector('.v473-recovery p');if(score)score.textContent=String(x.score);if(ring)ring.style.setProperty('--p',String(x.score));if(title)title.textContent=name;if(p)p.textContent=advice}
 function stamp(){document.querySelectorAll('.v473-version').forEach(e=>e.textContent=VERSION);window.__CUT_COACH_UI_VERSION=VERSION}
-function apply(){try{stamp();sync()}catch(e){console.error('v4.8.12 recovery sync',e)}}
-function boot(){apply();const old=window.render;if(typeof old==='function'&&!old.__v4812){const w=function(){const r=old.apply(this,arguments);queueMicrotask(apply);return r};w.__v4812=true;window.render=w}window.addEventListener('cutcoach-health-hydrated',()=>queueMicrotask(apply));setTimeout(apply,500);setTimeout(apply,1500)}
+function apply(){try{stamp();sync()}catch(e){console.error('v4.8.13 recovery sync',e)}}
+function boot(){apply();const old=window.render;if(typeof old==='function'&&!old.__v4813){const w=function(){const r=old.apply(this,arguments);queueMicrotask(apply);return r};w.__v4813=true;window.render=w}window.addEventListener('cutcoach-health-hydrated',()=>queueMicrotask(apply));setTimeout(apply,500);setTimeout(apply,1500)}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,250));else setTimeout(boot,250);
 })();
